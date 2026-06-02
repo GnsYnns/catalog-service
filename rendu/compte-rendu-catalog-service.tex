@@ -1,0 +1,267 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{longtable}
+
+\geometry{margin=2.5cm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue
+}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!8},
+    columns=fullflexible
+}
+
+\title{Compte rendu -- Catalog Service API}
+\author{Yannis}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\section{Présentation du projet}
+
+Le projet \textbf{Catalog Service} est un micro-service développé avec \textbf{Django} et \textbf{Django REST Framework}. Il permet de gérer un catalogue de produits dans le cadre du projet FlexShop.
+
+L'API expose des endpoints REST permettant de créer, consulter, modifier, supprimer, filtrer, rechercher et trier des produits. Une documentation OpenAPI est également fournie via Swagger UI.
+
+\section{Lien vers le dépôt Git}
+
+Le dépôt Git du projet est disponible à l'adresse suivante :
+
+\begin{center}
+\url{A_COMPLETER_AVEC_LE_LIEN_DU_DEPOT_GIT}
+\end{center}
+
+\textbf{À compléter avant rendu :} remplacer \texttt{A\_COMPLETER\_AVEC\_LE\_LIEN\_DU\_DEPOT\_GIT} par le lien réel du dépôt Git.
+
+\section{Technologies utilisées}
+
+\begin{itemize}
+    \item Python 3.12+
+    \item Django 6.0.5
+    \item Django REST Framework 3.17.1
+    \item django-filter
+    \item drf-spectacular pour la documentation OpenAPI
+    \item SQLite pour la base de données locale de développement
+\end{itemize}
+
+\section{Fonctionnalités réalisées}
+
+\subsection{CRUD complet}
+
+L'API permet d'effectuer toutes les opérations CRUD sur les produits :
+
+\begin{longtable}{|p{4cm}|p{8cm}|}
+\hline
+\textbf{Méthode et endpoint} & \textbf{Description} \\
+\hline
+\texttt{GET /api/v1/products/} & Liste tous les produits avec pagination. \\
+\hline
+\texttt{POST /api/v1/products/} & Crée un nouveau produit. \\
+\hline
+\texttt{GET /api/v1/products/\{id\}/} & Récupère le détail d'un produit. \\
+\hline
+\texttt{PATCH /api/v1/products/\{id\}/} & Modifie partiellement un produit. \\
+\hline
+\texttt{PUT /api/v1/products/\{id\}/} & Remplace complètement un produit. \\
+\hline
+\texttt{DELETE /api/v1/products/\{id\}/} & Supprime un produit. \\
+\hline
+\end{longtable}
+
+\subsection{Pagination, filtrage, recherche et tri}
+
+La pagination est configurée globalement dans Django REST Framework avec une taille de page de 10 éléments.
+
+L'API permet également :
+
+\begin{itemize}
+    \item le filtrage par catégorie avec \texttt{?category=electronics} ;
+    \item la recherche par nom ou description avec \texttt{?search=souris} ;
+    \item le tri par prix, date de création ou stock avec \texttt{?ordering=price\_cents}.
+\end{itemize}
+
+\subsection{Endpoint custom avec \texttt{@action}}
+
+Un endpoint personnalisé a été ajouté avec le décorateur \texttt{@action} de Django REST Framework :
+
+\begin{lstlisting}
+GET /api/v1/products/low-stock/?threshold=5
+\end{lstlisting}
+
+Cet endpoint retourne les produits dont le stock est inférieur ou égal au seuil indiqué. Il permet par exemple d'identifier rapidement les produits à réapprovisionner.
+
+\subsection{Validation métier customisée}
+
+Le serializer applique plusieurs règles métier :
+
+\begin{itemize}
+    \item le prix doit être strictement positif ;
+    \item le prix ne peut pas dépasser \texttt{99 999 999,99} euros ;
+    \item le stock ne peut pas dépasser \texttt{100 000} unités ;
+    \item le paramètre \texttt{threshold} de l'endpoint \texttt{low-stock} doit être un entier.
+\end{itemize}
+
+\subsection{Prix stocké en centimes}
+
+Le prix est stocké en base de données sous forme d'entier avec le champ \texttt{price\_cents}. Cette approche évite les erreurs d'arrondi liées aux nombres flottants et correspond à une pratique courante dans les applications financières.
+
+L'API reste simple à utiliser : l'utilisateur envoie un prix au format décimal, par exemple \texttt{29.99}, et le serializer le convertit automatiquement en \texttt{2999} centimes.
+
+\section{Conformité REST}
+
+Les URI respectent les bonnes pratiques REST :
+
+\begin{itemize}
+    \item les ressources sont nommées au pluriel : \texttt{/products/} ;
+    \item les URI ne contiennent pas de verbe ;
+    \item les méthodes HTTP indiquent l'action à effectuer ;
+    \item les codes de statut HTTP sont cohérents : \texttt{200}, \texttt{201}, \texttt{204}, \texttt{400}, \texttt{404}.
+\end{itemize}
+
+\section{Documentation OpenAPI et Swagger UI}
+
+La documentation OpenAPI est générée avec \texttt{drf-spectacular}. Elle est disponible via les endpoints suivants :
+
+\begin{itemize}
+    \item Swagger UI : \url{http://localhost:8000/api/docs/}
+    \item Schéma OpenAPI : \url{http://localhost:8000/api/schema/}
+\end{itemize}
+
+\subsection{Capture d'écran de Swagger UI fonctionnel}
+
+La capture d'écran de Swagger UI doit être placée dans le dossier \texttt{rendu/images/} avec le nom :
+
+\begin{lstlisting}
+swagger-ui.png
+\end{lstlisting}
+
+Une fois l'image ajoutée, elle apparaîtra ci-dessous dans le PDF.
+
+\begin{figure}[h!]
+    \centering
+    \IfFileExists{images/swagger-ui.png}{
+        \includegraphics[width=0.95\textwidth]{images/swagger-ui.png}
+    }{
+        \fbox{\parbox{0.9\textwidth}{\centering Capture Swagger UI à ajouter : \texttt{rendu/images/swagger-ui.png}}}
+    }
+    \caption{Swagger UI fonctionnel pour l'API Catalog Service.}
+\end{figure}
+
+\section{Collection Postman}
+
+Une collection Postman exportée au format JSON est fournie avec le rendu :
+
+\begin{lstlisting}
+rendu/catalog-service-postman-collection.json
+\end{lstlisting}
+
+Cette collection contient les requêtes principales suivantes :
+
+\begin{itemize}
+    \item liste des produits ;
+    \item création d'un produit ;
+    \item récupération du détail d'un produit ;
+    \item modification partielle ;
+    \item suppression ;
+    \item filtrage par catégorie ;
+    \item recherche ;
+    \item tri par prix en centimes ;
+    \item endpoint custom \texttt{low-stock} ;
+    \item récupération du schéma OpenAPI.
+\end{itemize}
+
+\section{Tests unitaires}
+
+Le projet contient 7 tests unitaires. Ils vérifient notamment :
+
+\begin{itemize}
+    \item l'accès à la liste des produits ;
+    \item la création d'un produit ;
+    \item la conversion du prix en centimes ;
+    \item le retour \texttt{404} pour un produit inexistant ;
+    \item le filtrage par catégorie ;
+    \item le rejet d'un prix négatif ;
+    \item le fonctionnement de l'endpoint custom \texttt{low-stock} ;
+    \item la mise à jour d'un prix avec recalcul de \texttt{price\_cents}.
+\end{itemize}
+
+Les tests ont été exécutés avec succès :
+
+\begin{lstlisting}
+Found 7 test(s).
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.028s
+
+OK
+Destroying test database for alias 'default'...
+\end{lstlisting}
+
+\section{Installation et exécution}
+
+\subsection{Installation des dépendances}
+
+\begin{lstlisting}
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+\end{lstlisting}
+
+\subsection{Application des migrations}
+
+\begin{lstlisting}
+python3 manage.py migrate
+\end{lstlisting}
+
+\subsection{Lancement du serveur}
+
+\begin{lstlisting}
+python3 manage.py runserver
+\end{lstlisting}
+
+\subsection{Lancement des tests}
+
+\begin{lstlisting}
+python3 manage.py test products
+\end{lstlisting}
+
+\section{Qualité du projet}
+
+Le projet contient les éléments attendus pour un rendu propre :
+
+\begin{itemize}
+    \item un fichier \texttt{README.md} clair ;
+    \item un fichier \texttt{requirements.txt} listant les dépendances ;
+    \item un fichier \texttt{.gitignore} excluant notamment \texttt{venv/}, \texttt{db.sqlite3}, \texttt{\_\_pycache\_\_/} et les fichiers \texttt{*.pyc} ;
+    \item des tests unitaires fonctionnels ;
+    \item une documentation Swagger accessible.
+\end{itemize}
+
+\section{Conclusion}
+
+Le micro-service Catalog Service répond aux critères demandés : endpoints CRUD fonctionnels, respect des conventions REST, documentation OpenAPI, tests unitaires, qualité du projet et fonctionnalités bonus. Les bonus intégrés sont l'endpoint custom avec \texttt{@action}, la validation métier customisée et le stockage du prix en centimes.
+
+\end{document}

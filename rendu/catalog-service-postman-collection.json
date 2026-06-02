@@ -1,0 +1,183 @@
+{
+  "info": {
+    "name": "Catalog Service API",
+    "description": "Collection Postman pour tester l'API REST Catalog Service du projet FlexShop.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "product_id",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Products - List",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", ""]
+        }
+      }
+    },
+    {
+      "name": "Products - Create",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Souris sans fil\",\n  \"description\": \"Souris ergonomique Bluetooth\",\n  \"price\": \"29.99\",\n  \"stock\": 50,\n  \"category\": \"electronics\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", ""]
+        }
+      }
+    },
+    {
+      "name": "Products - Detail",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/{{product_id}}/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", "{{product_id}}", ""]
+        }
+      }
+    },
+    {
+      "name": "Products - Partial Update",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"price\": \"34.99\",\n  \"stock\": 25\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/{{product_id}}/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", "{{product_id}}", ""]
+        }
+      }
+    },
+    {
+      "name": "Products - Delete",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/{{product_id}}/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", "{{product_id}}", ""]
+        }
+      }
+    },
+    {
+      "name": "Products - Filter By Category",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/?category=electronics",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", ""],
+          "query": [
+            {
+              "key": "category",
+              "value": "electronics"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Products - Search",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/?search=souris",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", ""],
+          "query": [
+            {
+              "key": "search",
+              "value": "souris"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Products - Ordering By Price Cents",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/?ordering=price_cents",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", ""],
+          "query": [
+            {
+              "key": "ordering",
+              "value": "price_cents"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Products - Low Stock Action",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/v1/products/low-stock/?threshold=5",
+          "host": ["{{base_url}}"],
+          "path": ["api", "v1", "products", "low-stock", ""],
+          "query": [
+            {
+              "key": "threshold",
+              "value": "5"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "OpenAPI Schema",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/schema/",
+          "host": ["{{base_url}}"],
+          "path": ["api", "schema", ""]
+        }
+      }
+    }
+  ]
+}
