@@ -17,3 +17,12 @@ db.sqlite3
 # Dossiers d'IDE (si tu utilises VS Code ou Windsurf)
 .vscode/
 .idea/
+
+# Dossiers de rendu
+rendu/*.aux
+rendu/*.log
+rendu/*.out
+rendu/*.toc
+rendu/*.synctex.gz
+rendu/*.fls
+rendu/*.fdb_latexmk
