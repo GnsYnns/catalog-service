@@ -1,0 +1,19 @@
+# Environnement virtuel
+venv/
+.venv/
+
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Base de données locale (très important)
+db.sqlite3
+
+# Fichiers de configuration / Variables d'environnement
+.env
+
+# Dossiers d'IDE (si tu utilises VS Code ou Windsurf)
+.vscode/
+.idea/
